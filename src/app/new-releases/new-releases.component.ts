@@ -1,18 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import data from '../data/New-releases.json';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { MusicDataService } from '../music-data.service';
+
+
 @Component({
   selector: 'app-new-releases',
   templateUrl: './new-releases.component.html',
   styleUrls: ['./new-releases.component.css']
 })
-export class NewReleasesComponent implements OnInit {
+export class NewReleasesComponent implements OnInit, OnDestroy {
 
-  gridColumns = 3;
-  releases: any ;//= data.albums.items;
-  constructor() { }
+  releases: any;
+  private newReleasesSub: Subscription | undefined;
+
+  constructor(private musicData: MusicDataService) { }
 
   ngOnInit(): void {
-    this.releases = data.albums.items;
+
+    this.newReleasesSub = this.musicData.getNewReleases().subscribe(data => {
+      this.releases = data.albums.items;
+    });
+
   }
 
+  ngOnDestroy(): void{
+    this.newReleasesSub?.unsubscribe();
+  }
 }

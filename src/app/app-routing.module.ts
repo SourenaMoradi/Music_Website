@@ -6,14 +6,22 @@ import { ArtistDiscographyComponent } from './artist-discography/artist-discogra
 import { AlbumComponent } from './album/album.component';
 import { AboutComponent } from './about/about.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-
+import {SearchResultComponent} from './search-result/search-result.component';
+import {FavouritesComponent} from './favourites/favourites.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { GuardAuthService } from './guard-auth.service';
 const routes: Routes = [
-  { path: 'newReleases', component: NewReleasesComponent },
-  { path: 'artist', component: ArtistDiscographyComponent },
-  { path: 'album', component: AlbumComponent },
-  { path: 'about', component: AboutComponent },
-  { path: '', redirectTo: 'newReleases' , pathMatch: 'full' },
-  { path: '**', component: NotFoundComponent }
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: "newReleases", component: NewReleasesComponent,canActivate: [GuardAuthService]},
+  { path: "artist/:id", component: ArtistDiscographyComponent, canActivate: [GuardAuthService] },
+  { path: "album/:id", component: AlbumComponent, canActivate: [GuardAuthService] },
+  { path: "about", component: AboutComponent, canActivate: [GuardAuthService] },
+  { path: "search", component: SearchResultComponent, canActivate: [GuardAuthService]},
+  { path: "favourites", component: FavouritesComponent, canActivate: [GuardAuthService] },
+  { path: "", redirectTo: "/login", pathMatch: "full" },
+  { path: "**", component: NotFoundComponent }
 ];
 
 @NgModule({
